@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
   <title>Platin Giyim</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -80,31 +81,48 @@
       color: var(--muted);
       margin-bottom: 8px;
     }
+    .copy-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .copy-row + .copy-row {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(201, 161, 74, 0.18);
+    }
     .iban-name {
       font-size: 14px;
       letter-spacing: 0.5px;
       color: var(--gold-light);
       font-weight: 600;
       text-transform: uppercase;
-      margin-bottom: 10px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(201, 161, 74, 0.18);
-    }
-    .iban-name.empty {
-      color: var(--muted);
-      font-style: italic;
-      font-weight: 400;
-      text-transform: none;
     }
     .iban-value {
-      font-size: 16px;
-      letter-spacing: 1px;
-      word-break: break-all;
+      font-size: clamp(11px, 3.6vw, 15px);
+      letter-spacing: 0.5px;
+      white-space: nowrap;
       color: var(--text);
       font-weight: 500;
     }
-    .iban-value.empty { color: var(--muted); font-style: italic; }
-    .copy-btn + .copy-btn { margin-top: 10px; }
+    .icon-btn {
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(201, 161, 74, 0.35);
+      border-radius: 9px;
+      background: rgba(201, 161, 74, 0.08);
+      cursor: pointer;
+      transition: transform 0.12s ease, background 0.2s ease;
+    }
+    .icon-btn:active { transform: scale(0.9); }
+    .icon-btn svg { width: 16px; height: 16px; fill: var(--gold-light); }
+    .icon-btn.copied { background: rgba(74, 201, 116, 0.18); border-color: rgba(74, 201, 116, 0.5); }
+    .icon-btn.copied svg { fill: #6fd99a; }
     .copy-btn {
       margin-top: 14px;
       width: 100%;
@@ -165,11 +183,19 @@
       <div class="section-label">IBAN</div>
       <div class="iban-box">
         <div class="iban-bank">Ziraat Bankası</div>
-        <div class="iban-name" id="ibanName">Ertan Özyurt</div>
-        <div class="iban-value" id="iban">TR58 0001 0002 1738 4246 3850 04</div>
+        <div class="copy-row">
+          <span class="iban-name" id="ibanName">Ertan Özyurt</span>
+          <button class="icon-btn" onclick="copyText('ibanName', this)" aria-label="İsmi kopyala">
+            <svg class="ic-copy" viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v12h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>
+          </button>
+        </div>
+        <div class="copy-row">
+          <span class="iban-value" id="iban">TR58 0001 0002 1738 4246 3850 04</span>
+          <button class="icon-btn" onclick="copyText('iban', this, true)" aria-label="IBAN kopyala">
+            <svg class="ic-copy" viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v12h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>
+          </button>
+        </div>
       </div>
-      <button class="copy-btn" id="copyNameBtn" onclick="copyText('ibanName', this, 'İsmi Kopyala')">İsmi Kopyala</button>
-      <button class="copy-btn" id="copyBtn" onclick="copyText('iban', this, \"IBAN'i Kopyala\", true)">IBAN'i Kopyala</button>
     </div>
 
     <!-- Instagram -->
@@ -190,18 +216,21 @@
   </main>
 
   <script>
-    function copyText(id, btn, label, stripSpaces) {
+    var COPY_ICON = '<svg class="ic-copy" viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v12h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>';
+    var CHECK_ICON = '<svg viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+
+    function copyText(id, btn, stripSpaces) {
       var el = document.getElementById(id);
       var text = (el.textContent || '').trim();
       if (stripSpaces) text = text.replace(/\s+/g, '');
-      if (el.classList.contains('empty') || !text) {
-        btn.textContent = 'Henüz eklenmedi';
-        setTimeout(function () { btn.textContent = label; }, 1500);
-        return;
-      }
+      if (!text) return;
       navigator.clipboard.writeText(text).then(function () {
-        btn.textContent = 'Kopyalandı ✓';
-        setTimeout(function () { btn.textContent = label; }, 1500);
+        btn.classList.add('copied');
+        btn.innerHTML = CHECK_ICON;
+        setTimeout(function () {
+          btn.classList.remove('copied');
+          btn.innerHTML = COPY_ICON;
+        }, 1500);
       });
     }
   </script>
