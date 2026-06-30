@@ -37,15 +37,13 @@
       text-align: center;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     }
-    .brand {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 38px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      background: linear-gradient(135deg, var(--gold-light), var(--gold));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .logo {
+      width: 220px;
+      max-width: 70%;
+      height: auto;
+      border-radius: 14px;
+      display: block;
+      margin: 0 auto;
     }
     .tagline {
       font-size: 12px;
@@ -75,6 +73,22 @@
       padding: 16px;
       margin-bottom: 12px;
     }
+    .iban-name {
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      color: var(--gold-light);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(201, 161, 74, 0.18);
+    }
+    .iban-name.empty {
+      color: var(--muted);
+      font-style: italic;
+      font-weight: 400;
+      text-transform: none;
+    }
     .iban-value {
       font-size: 16px;
       letter-spacing: 1px;
@@ -83,6 +97,7 @@
       font-weight: 500;
     }
     .iban-value.empty { color: var(--muted); font-style: italic; }
+    .copy-btn + .copy-btn { margin-top: 10px; }
     .copy-btn {
       margin-top: 14px;
       width: 100%;
@@ -134,18 +149,19 @@
 </head>
 <body>
   <main class="card">
-    <div class="brand">Platin Giyim</div>
-    <div class="tagline">Ordu</div>
+    <img class="logo" src="logo.jpeg" alt="Platin Giyim" />
+    <div class="tagline">Giyim · Ordu</div>
     <hr class="divider" />
 
     <!-- IBAN -->
     <div class="block">
       <div class="section-label">IBAN</div>
       <div class="iban-box">
-        <!-- IBAN'i buraya yazin. Ornek: TR00 0000 0000 0000 0000 0000 00 -->
-        <div class="iban-value empty" id="iban">Yakinda eklenecek</div>
+        <div class="iban-name" id="ibanName">Ertan Özyurt</div>
+        <div class="iban-value" id="iban">TR58 0001 0002 1738 4246 3850 04</div>
       </div>
-      <button class="copy-btn" id="copyBtn" onclick="copyIban()">IBAN'i Kopyala</button>
+      <button class="copy-btn" id="copyNameBtn" onclick="copyText('ibanName', this, 'İsmi Kopyala')">İsmi Kopyala</button>
+      <button class="copy-btn" id="copyBtn" onclick="copyText('iban', this, \"IBAN'i Kopyala\", true)">IBAN'i Kopyala</button>
     </div>
 
     <!-- Instagram -->
@@ -166,18 +182,18 @@
   </main>
 
   <script>
-    function copyIban() {
-      var el = document.getElementById('iban');
-      var btn = document.getElementById('copyBtn');
-      var iban = (el.textContent || '').replace(/\s+/g, '');
-      if (el.classList.contains('empty') || !iban) {
-        btn.textContent = 'IBAN henüz eklenmedi';
-        setTimeout(function () { btn.textContent = "IBAN'i Kopyala"; }, 1500);
+    function copyText(id, btn, label, stripSpaces) {
+      var el = document.getElementById(id);
+      var text = (el.textContent || '').trim();
+      if (stripSpaces) text = text.replace(/\s+/g, '');
+      if (el.classList.contains('empty') || !text) {
+        btn.textContent = 'Henüz eklenmedi';
+        setTimeout(function () { btn.textContent = label; }, 1500);
         return;
       }
-      navigator.clipboard.writeText(iban).then(function () {
+      navigator.clipboard.writeText(text).then(function () {
         btn.textContent = 'Kopyalandı ✓';
-        setTimeout(function () { btn.textContent = "IBAN'i Kopyala"; }, 1500);
+        setTimeout(function () { btn.textContent = label; }, 1500);
       });
     }
   </script>
