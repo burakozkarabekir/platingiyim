@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Platin Giyim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #c9a14a;
+      --gold-light: #e6c97a;
+      --dark: #0e0e10;
+      --card: #17171b;
+      --text: #f2f0ea;
+      --muted: #9a978f;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: radial-gradient(circle at 50% 0%, #1c1c22 0%, var(--dark) 60%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card);
+      border: 1px solid rgba(201, 161, 74, 0.25);
+      border-radius: 24px;
+      padding: 40px 28px 32px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+    .brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 38px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .tagline {
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .divider {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 24px auto;
+      border: none;
+    }
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .iban-box {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(201, 161, 74, 0.2);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .iban-value {
+      font-size: 16px;
+      letter-spacing: 1px;
+      word-break: break-all;
+      color: var(--text);
+      font-weight: 500;
+    }
+    .iban-value.empty { color: var(--muted); font-style: italic; }
+    .copy-btn {
+      margin-top: 14px;
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      color: #1a1407;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.2s ease;
+    }
+    .copy-btn:active { transform: scale(0.97); }
+    .copy-btn:disabled { opacity: 0.6; cursor: default; }
+    .ig-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 4px auto 0;
+      padding: 13px 22px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      color: #fff;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .ig-link svg { width: 20px; height: 20px; fill: #fff; }
+    .address {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .map-link {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--gold-light);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+    .map-link:hover { text-decoration: underline; }
+    .block { margin-bottom: 26px; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand">Platin Giyim</div>
+    <div class="tagline">Ordu</div>
+    <hr class="divider" />
+
+    <!-- IBAN -->
+    <div class="block">
+      <div class="section-label">IBAN</div>
+      <div class="iban-box">
+        <!-- IBAN'i buraya yazin. Ornek: TR00 0000 0000 0000 0000 0000 00 -->
+        <div class="iban-value empty" id="iban">Yakinda eklenecek</div>
+      </div>
+      <button class="copy-btn" id="copyBtn" onclick="copyIban()">IBAN'i Kopyala</button>
+    </div>
+
+    <!-- Instagram -->
+    <div class="block">
+      <div class="section-label">Bizi Takip Edin</div>
+      <a class="ig-link" href="https://instagram.com/platingiyimordu" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.43.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.43.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.43-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.43-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.12 1.38C1.36 2.67.95 3.34.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.8.72 1.47 1.38 2.13.66.66 1.33 1.07 2.12 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.8-.31 1.47-.72 2.13-1.38.66-.66 1.07-1.33 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.8-.72-1.47-1.38-2.13A5.85 5.85 0 0 0 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0z"/><path d="M12 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 4-4 4 4 0 0 1-4 4z"/><circle cx="18.41" cy="5.59" r="1.44"/></svg>
+        @platingiyimordu
+      </a>
+    </div>
+
+    <!-- Adres -->
+    <div>
+      <div class="section-label">Adres</div>
+      <div class="address">Düz Mahallesi<br />Alanarası Sokak No:4<br />Ordu</div>
+      <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Düz+Mahallesi+Alanarası+Sokak+No:4+Ordu" target="_blank" rel="noopener">Haritada Aç →</a>
+    </div>
+  </main>
+
+  <script>
+    function copyIban() {
+      var el = document.getElementById('iban');
+      var btn = document.getElementById('copyBtn');
+      var iban = (el.textContent || '').replace(/\s+/g, '');
+      if (el.classList.contains('empty') || !iban) {
+        btn.textContent = 'IBAN henüz eklenmedi';
+        setTimeout(function () { btn.textContent = "IBAN'i Kopyala"; }, 1500);
+        return;
+      }
+      navigator.clipboard.writeText(iban).then(function () {
+        btn.textContent = 'Kopyalandı ✓';
+        setTimeout(function () { btn.textContent = "IBAN'i Kopyala"; }, 1500);
+      });
+    }
+  </script>
+</body>
+</html>
